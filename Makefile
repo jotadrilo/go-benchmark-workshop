@@ -1,8 +1,7 @@
 EXAMPLES=\
 	0-concepts\
 	1-concepts\
-	2-sort\
-	3-map
+	2-sort
 
 CAT := $(shell command -v bat 2>/dev/null || command -v cat)
 DIFF := $(shell command -v diff -ur)
