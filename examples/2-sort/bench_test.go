@@ -3,6 +3,7 @@ package bench
 import (
 	"fmt"
 	"math/rand"
+	"sort"
 	"testing"
 )
 
@@ -15,7 +16,7 @@ func gen(n int) []int {
 }
 
 // Sort slice using quicksort implementation
-func SortInts(s []int) {
+func SortIntsV1(s []int) {
 	quicksort(s, 0, len(s)-1)
 }
 
@@ -49,7 +50,7 @@ func quicksort(s []int, begin int, end int) {
 	quicksort(s, pivot+1, end)
 }
 
-func BenchmarkSortInts(b *testing.B) {
+func BenchmarkSortIntsV1(b *testing.B) {
 	testCases := []int{10, 100, 1000, 10000, 100000}
 	for _, tc := range testCases {
 		b.Run(fmt.Sprintf("%d", tc), func(b *testing.B) {
@@ -59,7 +60,28 @@ func BenchmarkSortInts(b *testing.B) {
 				s := gen(tc)
 				b.StartTimer()
 
-				SortInts(s)
+				SortIntsV1(s)
+			}
+		})
+	}
+}
+
+// Sort slice using Golang sort implementation
+func SortIntsV2(s []int) {
+	sort.Ints(s)
+}
+
+func BenchmarkSortIntsV2(b *testing.B) {
+	testCases := []int{10, 100, 1000, 10000, 100000}
+	for _, tc := range testCases {
+		b.Run(fmt.Sprintf("%d", tc), func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				// Stop benchmark timer while preparing the input
+				b.StopTimer()
+				s := gen(tc)
+				b.StartTimer()
+
+				SortIntsV2(s)
 			}
 		})
 	}
